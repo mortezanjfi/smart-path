@@ -1,6 +1,7 @@
 import PriceChart from "@components/charts/PriceChart";
 import "./App.css";
 import ChartContext from "@context/ChartContext";
+import DetailPrice from "@components/charts/DetailPrice";
 
 function App() {
   return (
@@ -10,8 +11,12 @@ function App() {
           <div className="col-span-2 bg-white rounded-md flex justify-center items-center">
             <PriceChart />
           </div>
-          <div className="bg-white rounded-md"></div>
-          <div className="bg-white rounded-md col-span-full"></div>
+          <div className="bg-white rounded-md flex justify-center items-center">
+            <h1 className="bold text-blue-600 text-lg">Smart Path!</h1>
+          </div>
+          <div className="bg-white rounded-md col-span-full">
+            <DetailPrice />
+          </div>
         </ChartContext.ChartProvider>
       </div>
     </div>

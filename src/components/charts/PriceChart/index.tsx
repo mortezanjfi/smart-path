@@ -26,10 +26,10 @@ Chart.register(
 type Props = {};
 
 export default function PriceChart({}: Props) {
-  const { loading, error, chartData } = ChartContext.useChart();
+  const { loading, error, filteredData } = ChartContext.useChart();
 
   if (error) return <div>error</div>;
   if (loading) return <div>Loading...</div>;
 
-  return <Bar data={chartData} />;
+  return <Bar data={filteredData} />;
 }

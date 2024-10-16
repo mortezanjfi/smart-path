@@ -6,10 +6,20 @@ import React, {
   useEffect,
   useCallback,
   PropsWithChildren,
+  useMemo,
 } from "react";
 
+type FiltersType = {
+  higher: boolean;
+  lower: boolean;
+  average: boolean;
+};
+
+type HandleFiltersType = (name: keyof FiltersType, value: boolean) => void;
 interface ChartContextType {
-  chartData: any;
+  filteredData: any;
+  filters: FiltersType;
+  setFilters: HandleFiltersType;
   loading: boolean;
   error: boolean;
 }
@@ -25,9 +35,21 @@ const useChart = () => {
 };
 
 const ChartProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const [filters, setFilters] = useState({
+    higher: true,
+    lower: true,
+    average: true,
+  });
   const [chartData, setChartData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  const handleFilters: HandleFiltersType = (name, value) => {
+    setFilters((prev) => {
+      const updatedFilters = { ...prev, [name]: value };
+      return updatedFilters;
+    });
+  };
 
   const fetchData = useCallback(async () => {
     try {
@@ -36,7 +58,7 @@ const ChartProvider: React.FC<PropsWithChildren> = ({ children }) => {
         tsym: "USD",
         limit: 10,
       });
-      setChartData({
+      const options = {
         labels: data?.map((entry: any) =>
           new Date(entry.time * 1000).toLocaleTimeString()
         ),
@@ -60,7 +82,8 @@ const ChartProvider: React.FC<PropsWithChildren> = ({ children }) => {
             borderRadius: 4,
           },
         ],
-      });
+      };
+      setChartData(options);
       setError(false);
     } catch (error) {
       console.error("error fetching data", error);
@@ -70,12 +93,31 @@ const ChartProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   }, []);
 
+  const filteredData = useMemo(() => {
+    const activeFilters = Object.entries(filters).filter(([_, value]) => value);
+
+    return {
+      ...chartData,
+      datasets: chartData?.datasets?.filter((item: any) =>
+        activeFilters.some(([filterKey]) => filterKey === item.label)
+      ),
+    };
+  }, [filters, chartData]);
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
-    <ChartContext.Provider value={{ chartData, error, loading }}>
+    <ChartContext.Provider
+      value={{
+        filters,
+        setFilters: handleFilters,
+        filteredData,
+        error,
+        loading,
+      }}
+    >
       {children}
     </ChartContext.Provider>
   );
