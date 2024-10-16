@@ -18,7 +18,7 @@ const colors = {
   [COLORS_ENUM.green]: "border-green-500 checked:bg-green-500",
 };
 
-export default function DetailPrice({ name, color, checked, onChange }: Props) {
+export default function Checkbox({ name, color, checked, onChange }: Props) {
   return (
     <label className="flex items-center space-x-2">
       <input
