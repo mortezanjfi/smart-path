@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import ChartContext from "@context/ChartContext";
 
 Chart.register(
   CategoryScale,
@@ -25,52 +26,9 @@ Chart.register(
 type Props = {};
 
 export default function PriceChart({}: Props) {
-  const [chartData, setChartData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const { loading, error, chartData } = ChartContext.useChart();
 
-  const fetchData = useCallback(async () => {
-    try {
-      const data = await services.getPrices({
-        fsym: "BTC",
-        tsym: "USD",
-        limit: 10,
-      });
-      setChartData({
-        labels: data?.map((entry: any) =>
-          new Date(entry.time * 1000).toLocaleTimeString()
-        ),
-        datasets: [
-          {
-            label: "higher",
-            data: data?.map((entry: any) => entry?.high),
-            backgroundColor: "green",
-            borderRadius: 4,
-          },
-          {
-            label: "average",
-            data: data?.map((entry: any) => (entry?.low + entry?.high) / 2),
-            backgroundColor: "yellow",
-            borderRadius: 4,
-          },
-          {
-            label: "lower",
-            data: data?.map((entry: any) => entry?.low),
-            backgroundColor: "red",
-            borderRadius: 4,
-          },
-        ],
-      });
-    } catch (error) {
-      console.error("error fetching price data", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+  if (error) return <div>error</div>;
   if (loading) return <div>Loading...</div>;
 
   return <Bar data={chartData} />;
