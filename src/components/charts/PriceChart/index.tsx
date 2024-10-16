@@ -30,12 +30,11 @@ export default function PriceChart({}: Props) {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await services.getPrices({
+      const data = await services.getPrices({
         fsym: "BTC",
         tsym: "USD",
         limit: 10,
       });
-      const data = response?.data?.Data?.Data;
       setChartData({
         labels: data?.map((entry: any) =>
           new Date(entry.time * 1000).toLocaleTimeString()
