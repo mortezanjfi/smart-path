@@ -31,7 +31,20 @@ const getLocalStorageItemWithExpireTime = (key: string) => {
   return item.value;
 };
 
+const findMaxAndMinRange = (data: { high: number; low: number }[]) => {
+  if (!data) {
+    return;
+  }
+  const ranges = data?.map((item) => item?.high - item?.low);
+
+  const maxRange = Math.round(Math.max(...ranges) * 100) / 100;
+  const minRange = Math.round(Math.min(...ranges) * 100) / 100;
+
+  return { maxRange, minRange };
+};
+
 export default {
   getLocalStorageItemWithExpireTime,
   setLocalStorageItemWithExpireTime,
+  findMaxAndMinRange,
 };

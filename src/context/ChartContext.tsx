@@ -1,4 +1,5 @@
 import services from "@services";
+import utils from "@utils";
 import React, {
   createContext,
   useContext,
@@ -18,6 +19,7 @@ type FiltersType = {
 type HandleFiltersType = (name: keyof FiltersType, value: boolean) => void;
 interface ChartContextType {
   filteredData: any;
+  maxAndMinRange: { maxRange: number; minRange: number } | undefined;
   filters: FiltersType;
   setFilters: HandleFiltersType;
   loading: boolean;
@@ -41,6 +43,7 @@ const ChartProvider: React.FC<PropsWithChildren> = ({ children }) => {
     average: true,
   });
   const [chartData, setChartData] = useState<any>(null);
+  const [apiPureData, setApiPureData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -83,6 +86,7 @@ const ChartProvider: React.FC<PropsWithChildren> = ({ children }) => {
           },
         ],
       };
+      setApiPureData(data);
       setChartData(options);
       setError(false);
     } catch (error) {
@@ -104,6 +108,10 @@ const ChartProvider: React.FC<PropsWithChildren> = ({ children }) => {
     };
   }, [filters, chartData]);
 
+  const maxAndMinRange = useMemo(() => {
+    return utils.findMaxAndMinRange(apiPureData);
+  }, [apiPureData]);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -111,6 +119,7 @@ const ChartProvider: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <ChartContext.Provider
       value={{
+        maxAndMinRange,
         filters,
         setFilters: handleFilters,
         filteredData,
