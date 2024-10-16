@@ -24,6 +24,7 @@ Chart.register(
 );
 
 type Props = {};
+// price-chart component
 
 export default function PriceChart({}: Props) {
   const { loading, error, filteredData } = ChartContext.useChart();

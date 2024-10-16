@@ -28,6 +28,7 @@ interface ChartContextType {
 
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
 
+// hook for using context
 const useChart = () => {
   const context = useContext(ChartContext);
   if (!context) {
@@ -36,6 +37,7 @@ const useChart = () => {
   return context;
 };
 
+// main provider
 const ChartProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [filters, setFilters] = useState({
     higher: true,

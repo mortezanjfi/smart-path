@@ -18,6 +18,7 @@ const colors = {
   [COLORS_ENUM.green]: "border-green-500 checked:bg-green-500",
 };
 
+// checkbox component
 export default function Checkbox({ name, color, checked, onChange }: Props) {
   return (
     <label className="flex items-center space-x-2">

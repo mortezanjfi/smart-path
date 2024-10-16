@@ -1,8 +1,8 @@
-import React, { useState } from "react";
 import Checkbox, { COLORS_ENUM } from "./Checkbox";
 import ChartContext from "@context/ChartContext";
 
 type Props = {};
+// bottom component
 
 export default function DetailPrice({}: Props) {
   const { filters, setFilters, maxAndMinRange } = ChartContext.useChart();
