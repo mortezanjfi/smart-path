@@ -19,7 +19,8 @@
     "paths": {
       "@services": ["./src/services/index.ts"],
       "@utils": ["./src/utils/index.ts"],
-      "@components/*": ["./src/components/*"]
+      "@components/*": ["./src/components/*"],
+      "@context/*": ["./src/context/*"]
     }
   },
   "include": ["src"]
